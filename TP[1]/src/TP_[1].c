@@ -77,21 +77,21 @@ int main(void)
 									variableDeControl = utn_getFloat (&hospedaje, "Ingrese monto de hospedaje\n", "Ingrese un precio válido. Entre $0 y $1.000.000\n", 0, 1000000, 3);
 									if (variableDeControl == 0)
 									{
-										costoHospedaje = costoHospedaje + hospedaje;
+										costoHospedaje = hospedaje;
 									}
 									break;
 								case 2:
 									variableDeControl = utn_getFloat (&comida, "Ingrese monto de la comida\n", "Ingrese un precio válido. Entre $0 y $1.000.000\n", 0, 1000000, 3);
 									if (variableDeControl == 0)
 									{
-										 costoComida = costoComida + comida;
+										 costoComida = comida;
 									}
 									break;
 								case 3:
 									variableDeControl = utn_getFloat (&transporte, "Ingrese monto de transporte\n", "Ingrese un precio válido. Entre $0 y $1.000.000\n", 0, 1000000, 3);
 									if (variableDeControl == 0)
 									{
-										costoTransporte = costoTransporte + transporte;
+										costoTransporte = transporte;
 									}
 									break;
 							}
