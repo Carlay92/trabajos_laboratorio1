@@ -15,18 +15,8 @@
 #include "output.h"
 
 
-#define LEN 10 // deben ser max 3000
+#define LEN 3000 // deben ser 3000
 #define TAM 6
-
-eConfederacion confederaciones[]=
-{
-		{100,"CONMEBOL","SUDAMERICA",1916},
-		{101,"UEFA","EUROPA",1954},
-		{102,"AFC","ASIA",1954},
-		{103,"CAF","AFRICA",1957},
-		{104,"CONCACAF","NORTE Y CENTRO AMERICA",1961},
-		{105,"OFC","OCEANIA",1966}
-};
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -44,9 +34,20 @@ int main(void) {
 
 	unJugador.id = 0;
 
-	if (iniciaArrayJugadores(listaJugadores, LEN) == 0)
+	eConfederacion confederaciones[]=
 	{
-		printf ("MENU:\n");
+			{100,"CONMEBOL","SUDAMERICA",1916,0},
+			{101,"UEFA","EUROPA",1954,0},
+			{102,"AFC","ASIA",1954,0},
+			{103,"CAF","AFRICA",1957,0},
+			{104,"CONCACAF","NORTE Y CENTRO AMERICA",1961,0},
+			{105,"OFC","OCEANIA",1966,0}
+	};
+
+
+	if (iniciaArrayJugadores(listaJugadores, LEN) != 0)
+	{
+		printf ("No se puede iniciar el programa. Reintente\n");
 	}
 
 	do
@@ -75,7 +76,7 @@ int main(void) {
 				case 2:
 					if (flagAlta == 1 && contadorJugadores>0)
 					{
-						mostrarJugadores(listaJugadores, LEN, confederaciones);
+						mostrarJugadores(listaJugadores, LEN, confederaciones, TAM);
 						if (buscarPorID (listaJugadores, LEN, &posicionJugador) == 0)
 						{
 							if (darBaja(listaJugadores, posicionJugador) == 0)
@@ -94,7 +95,7 @@ int main(void) {
 				case 3:
 					if (flagAlta == 1 && contadorJugadores>0)
 					{
-						mostrarJugadores(listaJugadores, LEN, confederaciones);
+						mostrarJugadores(listaJugadores, LEN, confederaciones, TAM);
 						if (buscarPorID (listaJugadores, LEN, &posicionJugador) == 0)
 						{
 							subMenu();
@@ -160,41 +161,39 @@ int main(void) {
 							switch (opcionInformes)
 							{
 								case 1:
-									if (printInformeUno (listaJugadores, LEN, confederaciones) == 0)
+									if (printInformeUno (listaJugadores, LEN, confederaciones, TAM) != 0)
 									{
-										printf("Volviendo al menu;\n");
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 								case 2:
-									if (printInformeDos (listaJugadores, LEN) == 0)
+									if (printInformeDos (listaJugadores, LEN, confederaciones, TAM) != 0)
 									{
-										printf("Volviendo al menu...\n");
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 								case 3:
-									if (printInformeTres (listaJugadores, LEN) == 0)
+									if (printInformeTres (listaJugadores, LEN) != 0)
 									{
-										printf("Volviendo al menu...\n");
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 								case 4:
-									if (printInformeCuatro (listaJugadores, LEN) == 0)
+									if (printInformeCuatro (listaJugadores, LEN, confederaciones, TAM) != 0)
 									{
-										printf("Volviendo al menu...\n");
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 								case 5:
-									if (printInformeQuinto (listaJugadores, LEN,&contadorJugadores) == 0)
+									if (printInformeQuinto (listaJugadores, LEN, confederaciones, TAM, contadorJugadores) != 0)
 									{
-										printf("Volviendo al menu...\n");
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 								case 6:
-									if (printInformeSeis (listaJugadores, LEN) == 0)
+									if (printInformeSeis (listaJugadores, LEN, confederaciones, TAM) != 0)
 									{
-										printf("Volviendo al menu...\n");
-										//FALTA CHEQUEAR CUANDO TIENEN MISMA CANTIDAD DE JUG E IMPRIMIR LOS JUGADORES
-
+										printf("Error: No se puede mostrar el informe\n");
 									}
 									break;
 							}

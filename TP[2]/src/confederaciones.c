@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include "confederaciones.h"
 #include "jugadores.h"
 #include "utn_input.h"
 
-/*int arrayIsEmpty (eConfederacion* listaConfederaciones, int length, int* posicionVacia)
+int arrayConfederacionesIsEmpty (eConfederacion* listaConfederaciones, int length, int* posicionVacia)
 {
 	int retorno = -1;
 	int i;
@@ -45,7 +44,7 @@ int ingresaConfederacion (eConfederacion* ConfederacionUnica, int* id)
 	return retorno;
 }
 
-int buscarPorID (eConfederacion* listaConfederaciones, int length, int * posicionConfe)
+int buscarConfePorID (eConfederacion* listaConfederaciones, int length, int * posicionConfe)
 {
 	int retorno = -1;
 	int i;
@@ -69,7 +68,7 @@ int buscarPorID (eConfederacion* listaConfederaciones, int length, int * posicio
 	return retorno;
 }
 
-int darBaja(eConfederacion* listaConfederaciones, int posicionConfe)
+int darBajaConfederacion (eConfederacion* listaConfederaciones, int posicionConfe)
 {
 	int retorno = -1;
 
@@ -82,7 +81,7 @@ int darBaja(eConfederacion* listaConfederaciones, int posicionConfe)
 	return retorno;
 }
 
-int modificaNombre (eConfederacion* listaConfederaciones, int posicionConfe)
+int modificaNombreConfe (eConfederacion* listaConfederaciones, int posicionConfe)
 {
 	int retorno = -1;
 	char auxNombre[51];
@@ -98,7 +97,7 @@ int modificaNombre (eConfederacion* listaConfederaciones, int posicionConfe)
 	return retorno;
 }
 
-int modificaRegion (eConfederacion* listaConfederaciones, int posicionConfe)
+int modificaRegionConfe (eConfederacion* listaConfederaciones, int posicionConfe)
 {
 	int retorno = -1;
 	char auxRegion[51];
@@ -114,17 +113,17 @@ int modificaRegion (eConfederacion* listaConfederaciones, int posicionConfe)
 	return retorno;
 }
 
-int modificaAnioCreacion (eConfederacion* listaConfederaciones, int posicionConfe)
+int modificaAnioCreacionConfe (eConfederacion* listaConfederaciones, int posicionConfe)
 {
 	int retorno = -1;
 
 	if (listaConfederaciones != NULL)
 	{
-		if (utn_getShort(&(*(listaConfederaciones+posicionConfe)).anioCreacion, "Ingrese el año de creacion (1900/2022)\n", "No ingresó un número válido\n", 1900, 2022, 3) == 0)
+		if (utn_getNumero(&(*(listaConfederaciones+posicionConfe)).anioCreacion, "Ingrese el año de creacion (1900/2022)\n", "No ingresó un número válido\n", 1900, 2022, 3) == 0)
 		{
 			retorno = 0;
 		}
 	}
 	return retorno;
 }
-*/
+

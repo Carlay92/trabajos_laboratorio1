@@ -55,14 +55,14 @@ int ingresaJugador(eJugador* jugadorUnico, eConfederacion* confederaciones, int 
 
 	if (jugadorUnico!=NULL && idJugador !=NULL)
 	{
-		if (getStringconEspacio((*(jugadorUnico)).nombre, 51, "Ingrese APELLIDO y luego NOMBRE del jugador (max 50 caracteres)\n", "ERROR: intente nuevamente\n", 3) == 0 &&
-			getStringconEspacio((*(jugadorUnico)).posicion, 51, "Nombre de la posición en la que juega: \n", "Posición no válida\n", 3) == 0 &&
+		if (getStringconEspacio((*(jugadorUnico)).nombre, 51, "Ingrese APELLIDO y luego NOMBRE del jugador (max 50 caracteres)\n", "ERROR: Intente nuevamente con caracteres válidos y respetando el max.\n", 3) == 0 &&
+			get_Posicion((*(jugadorUnico)).posicion, 51, "Nombre de la posición en la que juega: (arquero, delantero, defensor o mediocampista)\n", "Posición no válida\n", 3) == 0 &&
 			utn_getShort(&(*(jugadorUnico)).numeroCamiseta, "Ingrese el numero de camiseta correspondiente (1-99)\n", "No ingresó un número válido\n", 1, 99, 3) == 0)
 		{
 			mostrarConfederaciones(confederaciones, length);
 		}
 		if (utn_getNumero(&(*(jugadorUnico)).idConfederacion, "Ingrese el ID de la federacion correspondiente\n", "No es un ID listado\n", 100, 105, 3) == 0 &&
-			utn_getFloat(&(*(jugadorUnico)).salario, "Ingrese el salario en pesos -sin signo '$'- Recuerde que el mínimo son 23.000'\n", "Salario no válido\n", 23000, 100000000, 3) == 0 &&
+			utn_getFloat(&(*(jugadorUnico)).salario, "Ingrese el salario en pesos -sin signo '$'- (Min 1000)\n", "Salario no válido\n", 1000, 1000000, 3) == 0 &&
 			utn_getShort(&(*(jugadorUnico)).aniosContrato, "Cantidad de años de contrato (min 1 - max 5)\n", "ERROR; intente nuevamente\n", 1, 5, 2) == 0)
 		{
 			(*(jugadorUnico)).isEmpty = 0;
@@ -134,7 +134,7 @@ int modificaPosicion (eJugador* listaJugadores, int posicionJugadorenArray)
 
 	if (listaJugadores != NULL)
 	{
-		if (getStringconEspacio(auxPosicion, 51, "Indique la posición en la que juega: \n", "Posición no válida\n", 3) == 0)
+		if (get_Posicion(auxPosicion, 51, "Indique la posición en la que juega: \n", "Posición no válida\n", 3) == 0)
 		{
 			strcpy((*(listaJugadores+posicionJugadorenArray)).posicion, auxPosicion);
 			retorno = 0;
@@ -178,7 +178,7 @@ int modificaSalario (eJugador* listaJugadores, int posicionJugadorenArray)
 
 	if (listaJugadores != NULL)
 	{
-		if (utn_getFloat(&(*(listaJugadores+posicionJugadorenArray)).salario, "Ingrese el salario en pesos -sin signo '$'- Recuerde que el mínimo son 23.000'\n", "Salario no válido\n", 23000, 100000000, 3) == 0)
+		if (utn_getFloat(&(*(listaJugadores+posicionJugadorenArray)).salario, "Ingrese el salario en pesos -sin signo '$'- (Min 1000)'\n", "Salario no válido\n", 1000, 1000000, 3) == 0)
 		{
 			retorno = 0;
 		}
@@ -200,7 +200,7 @@ int modificaContrato (eJugador* listaJugadores, int posicionJugadorenArray)
 	return retorno;
 }
 
-int ordenarConfederacionyJugadores (eJugador* listaJugadores, int length, eConfederacion* confederaciones)
+int ordenarConfederacionyJugadores (eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam)
 {
 	int retorno = -1;
 	int i;
@@ -211,11 +211,11 @@ int ordenarConfederacionyJugadores (eJugador* listaJugadores, int length, eConfe
 
 	if (listaJugadores != NULL && length > 0)
 	{
-		for (i=0; i<length -1; i++)
+		for (i=0; i<length-1; i++)
 		{
 			for (j=i+1; j<length; j++)
 			{
-				if (deIDaDescripcion(listaJugadores, i, confederaciones, descripcion1) == 0 && deIDaDescripcion(listaJugadores, j, confederaciones, descripcion2) == 0 )
+				if (deIDaDescripcion(listaJugadores, i, confederaciones, tam, descripcion1) == 0 && deIDaDescripcion(listaJugadores, j, confederaciones, tam, descripcion2) == 0 )
 				{
 					if (stricmp(descripcion2, descripcion1)<0)
 					{
@@ -240,41 +240,22 @@ int ordenarConfederacionyJugadores (eJugador* listaJugadores, int length, eConfe
 		return retorno;
 }
 
-int deIDaDescripcion(eJugador* jugador, int i, eConfederacion* confederaciones, char* descripcion)
+int deIDaDescripcion(eJugador* jugador, int i, eConfederacion* confederaciones, int tam, char* descripcion)
 {
 	int retorno = -1;
+	int j;
 
 	if (jugador != NULL && confederaciones != NULL && descripcion != NULL)
 	{
-		if ((*(jugador+i)).idConfederacion == 0)
+		for (j=0; j<tam; j++)
 		{
-			strcpy(descripcion,"\0");
+			if ((*(jugador+i)).idConfederacion == (*(confederaciones+j)).id)
+			{
+				strcpy(descripcion,(*(confederaciones+j)).nombre);
+				retorno = 0;
+				break;
+			}
 		}
-		if ((*(jugador+i)).idConfederacion == 100)
-		{
-			strcpy(descripcion,(*(confederaciones)).nombre);
-		}
-		if ((*(jugador+i)).idConfederacion == 101)
-		{
-			strcpy(descripcion,(*(confederaciones+1)).nombre);
-		}
-		if ((*(jugador+i)).idConfederacion == 102)
-		{
-			strcpy(descripcion,(*(confederaciones+2)).nombre);
-		}
-		if ((*(jugador+i)).idConfederacion == 103)
-		{
-			strcpy(descripcion,(*(confederaciones+3)).nombre);
-		}
-		if ((*(jugador+i)).idConfederacion == 104)
-		{
-			strcpy(descripcion,(*(confederaciones+4)).nombre);
-		}
-		if ((*(jugador+i)).idConfederacion == 105)
-		{
-			strcpy(descripcion,(*(confederaciones+5)).nombre);
-		}
-		retorno = 0;
 	}
 	return retorno;
 }
@@ -321,40 +302,21 @@ int salarioPromedioJugadores(eJugador* listaJugadores,int length,float* salarioP
 	return retorno;
 }
 
-int contarDuracionContratosPorConfederacion(eJugador* listaJugadores,int length,int * arrayContadorConfederaciones)
+int contarDuracionContratosPorConfederacion (eJugador* listaJugadores, int len, eConfederacion* confederaciones, int tam, int* arrayContadorConfederaciones)
 {
 	int retorno = -1;
 	int i;
-	if (listaJugadores != NULL && length > 0)
-	{
+	int j;
 
-		for (i=0;i<length;i++)
+	if (listaJugadores != NULL && confederaciones != NULL && len >0 && tam > 0)
+	{
+		for (i=0; i<tam; i++)
 		{
-			if ((*(listaJugadores+i)).isEmpty == 0)
+			for (j=0; j<len; j++)
 			{
-				if ((*(listaJugadores+i)).idConfederacion == 100)
+				if ((*(confederaciones+i)).id == (*(listaJugadores+j)).idConfederacion && (*(listaJugadores+j)).isEmpty == 0)
 				{
-					(*(arrayContadorConfederaciones + 0)) = (*(arrayContadorConfederaciones + 0 )) + (*(listaJugadores+i)).aniosContrato ;
-				}
-				if ((*(listaJugadores+i)).idConfederacion == 101)
-				{
-					(*(arrayContadorConfederaciones+1)) = (*(arrayContadorConfederaciones+1)) + (*(listaJugadores+i)).aniosContrato;
-				}
-				if ((*(listaJugadores+i)).idConfederacion == 102)
-				{
-					(*(arrayContadorConfederaciones+2)) = (*(arrayContadorConfederaciones+2)) +(*(listaJugadores+i)).aniosContrato;
-				}
-				if ((*(listaJugadores+i)).idConfederacion == 103)
-				{
-					(*(arrayContadorConfederaciones+3)) = (*(arrayContadorConfederaciones+3)) + (*(listaJugadores+i)).aniosContrato;
-				}
-				if ((*(listaJugadores+i)).idConfederacion == 104)
-				{
-					(*(arrayContadorConfederaciones+4)) = (*(arrayContadorConfederaciones+4)) + (*(listaJugadores+i)).aniosContrato ;
-				}
-				if ((*(listaJugadores+i)).idConfederacion == 105)
-				{
-					(*(arrayContadorConfederaciones+5)) = (*(arrayContadorConfederaciones+5)) + (*(listaJugadores+i)).aniosContrato;
+					(*(arrayContadorConfederaciones+i)) = (*(arrayContadorConfederaciones+i)) + (*(listaJugadores+j)).aniosContrato;
 				}
 			}
 		}
@@ -368,9 +330,9 @@ int buscarMax (int* array, int length, int * numMaximo, int * posicionMaximo)
 	int retorno = -1;
 	int i;
 
-	if (array != NULL && length > 0 && numMaximo != NULL)
+	if (array != NULL && length > 0 && numMaximo != NULL && posicionMaximo != NULL)
 	{
-		*numMaximo = (*(array));
+		*numMaximo = 0;
 		for (i=0; i<length; i++)
 		{
 			if ((*(array+i)) > *numMaximo)
@@ -378,53 +340,34 @@ int buscarMax (int* array, int length, int * numMaximo, int * posicionMaximo)
 				*numMaximo = (*(array+i));
 				*posicionMaximo = i;
 			}
-			/*else if((*(array+i)) == *numMaximo)
+			else if((*(array+i)) == *numMaximo)
 			{
 				*posicionMaximo = -1;
-			}*/
+			}
 		}
 		retorno = 0;
 	}
 	return retorno;
 }
 
-int contarJugadoresPorConfederacion(eJugador* listaJugadores,int length,int* arrayContadorJugadoresConfederaciones)
+int contarJugadoresPorConfederacion(eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam, int* arrayContadorJugadoresConfederaciones)
 {
 	int retorno = -1;
 	int i;
-	if (listaJugadores != NULL && length > 0)
+	int j;
+	if (listaJugadores != NULL && length > 0 && confederaciones != NULL && tam > 0)
 	{
-		for (i=0;i<length;i++)
+		for (i=0;i<tam;i++)
+		{
+			for (j=0; j<length; j++)
+			{
+				if ((*(confederaciones+i)).id == (*(listaJugadores+j)).idConfederacion && (*(listaJugadores+j)).isEmpty == 0)
 				{
-					if ((*(listaJugadores+i)).isEmpty == 0)
-					{
-						if ((*(listaJugadores+i)).idConfederacion == 100)
-						{
-							(*(arrayContadorJugadoresConfederaciones + 0)) = (*(arrayContadorJugadoresConfederaciones + 0 )) + 1 ;
-						}
-						if ((*(listaJugadores+i)).idConfederacion == 101)
-						{
-							(*(arrayContadorJugadoresConfederaciones+1)) = (*(arrayContadorJugadoresConfederaciones+1)) + 1;
-						}
-						if ((*(listaJugadores+i)).idConfederacion == 102)
-						{
-							(*(arrayContadorJugadoresConfederaciones+2)) = (*(arrayContadorJugadoresConfederaciones+2)) + 1;
-						}
-						if ((*(listaJugadores+i)).idConfederacion == 103)
-						{
-							(*(arrayContadorJugadoresConfederaciones+3)) = (*(arrayContadorJugadoresConfederaciones+3)) + 1;
-						}
-						if ((*(listaJugadores+i)).idConfederacion == 104)
-						{
-							(*(arrayContadorJugadoresConfederaciones+4)) = (*(arrayContadorJugadoresConfederaciones+4)) + 1 ;
-						}
-						if ((*(listaJugadores+i)).idConfederacion == 105)
-						{
-							(*(arrayContadorJugadoresConfederaciones+5)) = (*(arrayContadorJugadoresConfederaciones+5)) + 1;
-						}
-					}
+					(*(arrayContadorJugadoresConfederaciones+i)) = (*(arrayContadorJugadoresConfederaciones+i)) + 1;
 				}
-				retorno = 0;
+			}
+		}
+		retorno = 0;
 	}
 	return retorno;
 }

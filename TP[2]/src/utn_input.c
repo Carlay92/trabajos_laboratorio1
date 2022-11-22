@@ -266,6 +266,74 @@ int getString(char *cadena, int length)
 
 int getStringconEspacio (char *string, int length, char *mensaje, char *mensajeError, int reintentos)
 {
+		int retorno = -1;
+		char auxString[length];
+
+		if (string != NULL && length > 0)
+		{
+			printf("%s", mensaje);
+			do
+			{
+				if (getString(auxString, sizeof(auxString)) == 0 && isLetrayEspacio(auxString, sizeof(auxString)) == 0)
+				{
+					strncpy(string, auxString, sizeof(auxString));
+					retorno = 0;
+					break;
+
+				}
+				else
+				{
+					reintentos--;
+					if (reintentos > 0) {
+					printf("%s", mensajeError);
+					}
+					else
+					{
+						printf("\n-Se quedo sin reintentos-\n");
+						retorno = -1;
+					}
+				}
+			} while (reintentos > 0);
+		}
+		return retorno;
+	}
+
+int isLetrayEspacio(char* string, int lenght)
+{
+	int retorno = -1;
+	if(string != NULL && lenght > 0)
+	{
+		retorno = 0;
+		for(int i = 0; i < lenght && *(string +i) != '\0'; i++)
+		{
+			if((*(string +i) < 'A' || *(string +i) > 'Z') && (*(string +i) < 'a' || *(string +i) > 'z') && *(string +i) != ' ')
+			{
+				retorno = -1;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+
+
+int iniciaArray (int array[], int cantElementos)
+{
+	int retorno = -1;
+	int i;
+	if (array != NULL && cantElementos > 0)
+	{
+		for (i=0; i<cantElementos; i++)
+		{
+			array[i] = 0;
+		}
+		retorno = 0;
+	}
+	return retorno;
+}
+
+int get_Posicion (char *string, int length, char *mensaje, char *mensajeError, int reintentos)
+{
 	int retorno = -1;
 	char auxString[length];
 
@@ -274,7 +342,7 @@ int getStringconEspacio (char *string, int length, char *mensaje, char *mensajeE
 		printf("%s", mensaje);
 		do
 		{
-			if (getString(auxString, sizeof(auxString)) == 0)
+			if (getString(auxString, sizeof(auxString)) == 0 && isLetrayEspacio(auxString, sizeof(auxString)) == 0 && isPosicion(auxString, sizeof(auxString)) == 0)
 			{
 				strncpy(string, auxString, sizeof(auxString));
 				retorno = 0;
@@ -298,19 +366,15 @@ int getStringconEspacio (char *string, int length, char *mensaje, char *mensajeE
 	return retorno;
 }
 
-int iniciaArray (int array[], int cantElementos)
+int isPosicion (char* string, int length)
 {
-	int retorno = -1;
-	int i;
-	if (array != NULL && cantElementos > 0)
+	int retorno = 0;
+	if(string != NULL && length > 0)
 	{
-		for (i=0; i<cantElementos; i++)
+		if(stricmp(string, "arquero")!=0 && stricmp(string, "defensor")!=0  && stricmp(string, "delantero")!=0 && stricmp(string,"mediocampista")!= 0)
 		{
-			array[i] = 0;
+			retorno = -1;
 		}
-		retorno = 0;
 	}
 	return retorno;
 }
-
-

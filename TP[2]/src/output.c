@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include "confederaciones.h"
 #include "jugadores.h"
 #include "utn_input.h"
@@ -49,7 +48,7 @@ void mostrarConfederaciones(eConfederacion* confederaciones, int length)
 	printf("+===========================================================+\n");
 }
 
-int mostrarJugadores(eJugador* listaJugadores, int length, eConfederacion* confederaciones)
+int mostrarJugadores(eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam)
 {
 	int retorno = -1;
 	char confederacion[51];
@@ -80,7 +79,7 @@ int mostrarJugadores(eJugador* listaJugadores, int length, eConfederacion* confe
 			if ((*(listaJugadores+i)).isEmpty == 0)
 			{
 				printf("|%6d|%-30s|%-12s|%13hi|%12.2f|", (*(listaJugadores+i)).id, (*(listaJugadores+i)).nombre, (*(listaJugadores+i)).posicion,(*(listaJugadores+i)).numeroCamiseta, (*(listaJugadores+i)).salario);
-				if (deIDaDescripcion(listaJugadores, i, confederaciones, confederacion)==0)
+				if (deIDaDescripcion(listaJugadores, i, confederaciones, tam, confederacion)==0)
 				printf("%-15s|%18hi|\n", confederacion, (*(listaJugadores+i)).aniosContrato);
 			}
 		}
@@ -91,8 +90,7 @@ int mostrarJugadores(eJugador* listaJugadores, int length, eConfederacion* confe
 }
 
 
-int printInformeUno (eJugador* listaJugadores, int length, eConfederacion* confederaciones)
-
+int printInformeUno (eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam)
 {
 	int retorno = -1;
 	int i;
@@ -100,7 +98,7 @@ int printInformeUno (eJugador* listaJugadores, int length, eConfederacion* confe
 
 	if (listaJugadores != NULL && length >0)
 	{
-		if (ordenarConfederacionyJugadores (listaJugadores, length, confederaciones) == 0)
+		if (ordenarConfederacionyJugadores (listaJugadores, length, confederaciones, tam) == 0)
 		{
 			printf("+=========================+===============================+==================+=============+============+================+============+\n");
 			printf("|      CONFEDERACION      |             NOMBRE            |     POSICION     | N° CAMISETA |   SUELDO   | ANIOS CONTRATO | ID JUGADOR |\n");
@@ -109,7 +107,7 @@ int printInformeUno (eJugador* listaJugadores, int length, eConfederacion* confe
 			{
 				if ((*(listaJugadores+i)).isEmpty == 0)
 				{
-					if (deIDaDescripcion(listaJugadores, i, confederaciones,descripcion) == 0)
+					if (deIDaDescripcion(listaJugadores, i, confederaciones, tam, descripcion) == 0)
 					{
 						printf("|%-25s|%-31s|%-18s|%13hi|%12.2f|%16hi|%12d|\n", descripcion, (*(listaJugadores+i)).nombre,(*(listaJugadores+i)).posicion,(*(listaJugadores+i)).numeroCamiseta,(*(listaJugadores+i)).salario,(*(listaJugadores+i)).aniosContrato,(*(listaJugadores+i)).id);
 					}
@@ -123,91 +121,37 @@ int printInformeUno (eJugador* listaJugadores, int length, eConfederacion* confe
 	return retorno;
 }
 
-int printInformeDos (eJugador* listaJugadores, int length)
+int printInformeDos (eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam)
 {
 	int retorno = -1;
 	int i;
+	int j;
+	char auxDescripcion[30];
 
-	if (listaJugadores != NULL && length > 0)
+	if (listaJugadores != NULL && confederaciones != NULL && tam > 0 && length > 0)
 	{
-		printf("+===============================+\n");
-		printf("|            CONMEBOL           |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
+		for (i=0;i<tam;i++)
 		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 100)
+			printf("+================================================================+\n");
+			printf("|%-64s|\n", (*(confederaciones+i)).nombre);
+			printf("+================================================================+\n");
+			printf("|             NOMBRE            |     POSICION     | N° CAMISETA |\n");
+			printf("+-------------------------------+------------------+-------------+\n");
+			for (j=0;j<length;j++)
 			{
+				if ((*(listaJugadores+j)).isEmpty == 0 && deIDaDescripcion(listaJugadores, j, confederaciones, tam, auxDescripcion) == 0)
 				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
-				}
-			}
-		}
-		printf("+===============================+\n");
-		printf("|              UEFA             |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
-		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 101)
-			{
-				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
-				}
-			}
-		}
-		printf("+===============================+\n");
-		printf("|              AFC              |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
-		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 102)
-			{
-				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
-				}
-			}
-		}
-		printf("+===============================+\n");
-		printf("|              CAF              |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
-		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 103)
-			{
-				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
-				}
-			}
-		}
-		printf("+===============================+\n");
-		printf("|           CONCACAF            |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
-		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 104)
-			{
-				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
-				}
-			}
-		}
-		printf("+===============================+\n");
-		printf("|              OFC              |\n");
-		printf("+-------------------------------+\n");
-		for (i=0;i<length;i++)
-		{
-			if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == 105)
-			{
-				{
-					printf("|%-31s|\n",(*(listaJugadores+i)).nombre);
+					if (stricmp(auxDescripcion,(*(confederaciones+i)).nombre) == 0)
+					{
+						printf("|%-31s|%-18s|%13d|\n",(*(listaJugadores+j)).nombre, (*(listaJugadores+j)).posicion, (*(listaJugadores+j)).numeroCamiseta);
+					}
 				}
 			}
 		}
 		retorno = 0;
 	}
-
 	return retorno;
 }
-
 
 int printInformeTres (eJugador* listaJugadores, int length)
 {	int retorno = -1;
@@ -239,56 +183,34 @@ int printInformeTres (eJugador* listaJugadores, int length)
 	return retorno;
 }
 
-int printInformeCuatro (eJugador* listaJugadores, int length)
+int printInformeCuatro (eJugador* listaJugadores, int len, eConfederacion* listaConfederaciones, int tam)
 {
 	int retorno = -1;
-	int arrayContadorConfederaciones [6];
+	int arrayContadorConfederaciones[tam];
 	int numeroMaximoContratos = 0;
 	int posicionMaximo = 0;
-	if (listaJugadores != NULL && length > 0)
+	if (listaJugadores != NULL && len > 0 && listaConfederaciones != NULL && tam > 0)
 	{
-		if (iniciaArray (arrayContadorConfederaciones, 6) == 0)
+		if (iniciaArray (arrayContadorConfederaciones, tam) == 0)
 		{
-			if (contarDuracionContratosPorConfederacion(listaJugadores,length,arrayContadorConfederaciones)== 0)
+			if (contarDuracionContratosPorConfederacion(listaJugadores, len, listaConfederaciones, tam, arrayContadorConfederaciones)== 0)
 			{
-				if (buscarMax (arrayContadorConfederaciones,6,&numeroMaximoContratos, &posicionMaximo) == 0)
+				if (buscarMax (arrayContadorConfederaciones, tam, &numeroMaximoContratos, &posicionMaximo) == 0)
 				{
-					if (posicionMaximo == 0)
+					if (posicionMaximo == -1)
 					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: CONMEBOL  Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
+						printf("+-----------------------------------------------------------------+\n");
+						printf("| Hay mas de una confederación con %d años de contratos en total |\n", numeroMaximoContratos);
+						printf("+-----------------------------------------------------------------+\n");
 					}
-					if (posicionMaximo == 1)
+					if (posicionMaximo >= 0)
 					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: UEFA      Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
+						printf("+===============================================+=============================================+==========+\n");
+						printf("| Confederacion con mayor duracion en contratos:|%-20s| Total años de contrato:|%10d|\n",(*(listaConfederaciones+posicionMaximo)).nombre, numeroMaximoContratos);
+						printf("+-----------------------------------------------+---------------------------------------------+----------+\n");
+
 					}
-					if (posicionMaximo == 2)
-					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: AFC       Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
-					}
-					if (posicionMaximo == 3)
-					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: CAF       Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
-					}
-					if (posicionMaximo == 4)
-					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: CONCACAF  Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
-					}
-					if (posicionMaximo == 5)
-					{
-						printf("+==========================================================================================+==========+\n");
-						printf("| Confederacion con mayor duracion en los contratos: OFC       Total años de contrato:|%10d|\n",numeroMaximoContratos);
-						printf("+------------------------------------------------------------------------------------------+----------+\n");
-					}
+
 					retorno = 0;
 				}
 			}
@@ -297,7 +219,7 @@ int printInformeCuatro (eJugador* listaJugadores, int length)
 return retorno;
 }
 
-int printInformeQuinto (eJugador* listaJugadores, int length, int* contadorJugadores)
+int printInformeQuinto (eJugador* listaJugadores, int length, eConfederacion* confederaciones, int  tam, int contadorJugadores)
 {
 	int retorno = -1;
 	int arrayContadorJugadoresConfederaciones [6];
@@ -306,42 +228,20 @@ int printInformeQuinto (eJugador* listaJugadores, int length, int* contadorJugad
 	{
 		if (iniciaArray (arrayContadorJugadoresConfederaciones, 6) == 0)
 		{
-			if (contarJugadoresPorConfederacion(listaJugadores,length,arrayContadorJugadoresConfederaciones)== 0)
+			if (contarJugadoresPorConfederacion(listaJugadores,length, confederaciones, tam, arrayContadorJugadoresConfederaciones)== 0)
 			{
-				printf("+=================================+==============================+\n");
-				printf("|         CONFEDERACION           |   PORCENTAJE DE JUGADORES    |\n");
-				printf("+---------------------------------+------------------------------+\n");
-				for (i=0;i<6;i++)
+				printf("+==============================+=========================+\n");
+				printf("|        CONFEDERACION         | PORCENTAJE DE JUGADORES |\n");
+				printf("+------------------------------+-------------------------+\n");
+				for (i=0;i<tam;i++)
 				{
 					if (*(arrayContadorJugadoresConfederaciones+i) >= 0)
 					{
-						if (i == 0)
-						{
-							printf("|            CONMEBOL             |%%%29.2f|\n", (float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
-						if (i == 1)
-						{
-							printf("|              UEFA               |%%%29.2f|\n",(float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
-						if (i == 2)
-						{
-							printf("|              AFC                |%%%29.2f|\n",(float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
-						if (i == 3)
-						{
-							printf("|              CAF                |%%%29.2f|\n",(float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
-						if (i == 4)
-						{
-							printf("|            CONCACAF             |%%%29.2f|\n",(float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
-						if (i == 5)
-						{
-							printf("|              OFC                |%%%29.2f|\n",(float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(*contadorJugadores));
-						}
+						printf("|%-30s|%%%24.2f|\n", (*(confederaciones+i)).nombre, (float)(*(arrayContadorJugadoresConfederaciones+i)*100)/(contadorJugadores));
+						printf("+------------------------------+-------------------------+\n");
 					}
 				}
-				printf("+=================================+==============================+\n");
+				printf("+==============================+=========================+\n");
 				retorno = 0;
 			}
 		}
@@ -349,82 +249,49 @@ int printInformeQuinto (eJugador* listaJugadores, int length, int* contadorJugad
 	return retorno;
 }
 
-int printInformeSeis (eJugador* listaJugadores, int length)
+int printInformeSeis (eJugador* listaJugadores, int length, eConfederacion* confederaciones, int tam)
 {
 	int retorno = -1;
 	int i;
-	int idMostrar = 0;
 	int arrayContadorJugadoresConfederaciones [6];
 	int numeroMaximoJugadores = 0;
 	int posicionMaximo = 0;
 
 	if (listaJugadores != NULL && length > 0)
 		{
-			if (iniciaArray (arrayContadorJugadoresConfederaciones, 6) == 0)
+			if (iniciaArray (arrayContadorJugadoresConfederaciones, tam) == 0)
 			{
-				if (contarJugadoresPorConfederacion(listaJugadores,length,arrayContadorJugadoresConfederaciones)== 0)
+				if (contarJugadoresPorConfederacion(listaJugadores,length, confederaciones, tam, arrayContadorJugadoresConfederaciones)== 0)
 				{
-					if (buscarMax (arrayContadorJugadoresConfederaciones,6,&numeroMaximoJugadores, &posicionMaximo) == 0)
+					if (buscarMax (arrayContadorJugadoresConfederaciones, tam, &numeroMaximoJugadores, &posicionMaximo) == 0)
 					{
-						if (posicionMaximo == 0)
+						if (posicionMaximo >= 0)
 						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : SUDAMERICA  -              TOTAL DE JUGADORES:                      |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 100;
-						}
-						if (posicionMaximo == 1)
-						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : EUROPA  -                  TOTAL DE JUGADORES:                      |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 101;
-						}
-						if (posicionMaximo == 2)
-						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : ASIA -                          TOTAL DE JUGADORES:                 |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 102;
-						}
-						if (posicionMaximo == 3)
-						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : AFRICA -                   TOTAL DE JUGADORES:                      |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 103;
-						}
-						if (posicionMaximo == 4)
-						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : NORTE Y CENTRO AMERICA -   TOTAL DE JUGADORES:                      |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 104;
-						}
-						if (posicionMaximo == 5)
-						{
-							printf("+==========================================================================================+==========+\n");
-							printf("| REGION MAYORITARIA : OCEANIA -                  TOTAL DE JUGADORES:                      |%10d|\n",numeroMaximoJugadores);
-							printf("+------------------------------------------------------------------------------------------+----------+\n");
-							idMostrar = 105;
-						}
-						/*if (posicionMaximo == -1)
-						{
-							printf("Hay dos o mas regiones con la misma cantidad de jugadores (%d en total)\n", numeroMaximoJugadores);
-						}*/
-						printf("+=====================================================================================================+\n");
-						printf("|  ID  |             NOMBRE            |     POSICION     | N° CAMISETA |   SUELDO   | ANIOS CONTRATO |\n");
-						printf("+------+-------------------------------+------------------+-------------+------------+----------------+\n");
-						for (i=0;i<length;i++)
-						{
-							if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == idMostrar)
+							printf("+=========================================+====================+==========+\n");
+							printf("| REGION MAYORITARIA:|%-20s| Total de jugadores:|%10d|\n",(*(confederaciones+posicionMaximo)).region, numeroMaximoJugadores);
+							printf("+-----------------------------------------+--------------------+----------+\n\n");
+
+							printf("+=====================================================================================================+\n");
+							printf("|  ID  |             NOMBRE            |     POSICION     | N° CAMISETA |   SUELDO   | ANIOS CONTRATO |\n");
+							printf("+------+-------------------------------+------------------+-------------+------------+----------------+\n");
+							for (i=0;i<length;i++)
 							{
-								printf("|%6d|%-31s|%-18s|%13hi|%12.2f|%16hi|\n",(*(listaJugadores+i)).id, (*(listaJugadores+i)).nombre, (*(listaJugadores+i)).posicion, (*(listaJugadores+i)).numeroCamiseta, (*(listaJugadores+i)).salario, (*(listaJugadores+i)).aniosContrato);
+								if ((*(listaJugadores+i)).isEmpty == 0 && (*(listaJugadores+i)).idConfederacion == (*(confederaciones+posicionMaximo)).id)
+								{
+									printf("|%6d|%-31s|%-18s|%13hi|%12.2f|%16hi|\n",(*(listaJugadores+i)).id, (*(listaJugadores+i)).nombre, (*(listaJugadores+i)).posicion, (*(listaJugadores+i)).numeroCamiseta, (*(listaJugadores+i)).salario, (*(listaJugadores+i)).aniosContrato);
+								}
+
 							}
-
+							printf("+======+===============================+==================+=============+============+================+\n");
 						}
-						printf("+======+===============================+==================+=============+============+================+\n");
 
+
+						if (posicionMaximo == -1)
+						{
+							printf("+------------------------.-------------------------------------+\n");
+							printf("| Hay dos o mas regiones con un total de %d jugadores cada una |\n", numeroMaximoJugadores);
+							printf("+--------------------------------------------------------------+\n");
+						}
 						retorno = 0;
 					}
 				}

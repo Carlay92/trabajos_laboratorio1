@@ -97,6 +97,11 @@ int getString(char *cadena, int longitud);
 /// \param reintentos	posibilidades de ingresar el string incorrectamente
 /// \return	"0" si realizo la carga con exito."-1"  si fallo.
 int getStringconEspacio(char *string, int len, char *mensaje, char *mensajeError, int reintentos);
+
+int get_Posicion (char *string, int length, char *mensaje, char *mensajeError, int reintentos);
+
+int isLetrayEspacio (char* string, int lenght);
+
 /// \fn int iniciaArray(int[], int)
 /// \brief Inicia un array de tipo INT colocando todos sus elemntos en 0
 /// 		para borrar la basura en la memoria
@@ -106,4 +111,5 @@ int getStringconEspacio(char *string, int len, char *mensaje, char *mensajeError
 /// \return	"0" si realizo la carga con exito. "-1" si fallo.
 int iniciaArray (int array[], int cantElementos);
 
+int isPosicion (char* string, int length);
 #endif /* UTN_INPUT_H_ */
