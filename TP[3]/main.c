@@ -35,7 +35,7 @@ int main()
     do
     {
     	mostrarMenu();
-    	if (utn_getNumero(&menu, "Elija una opción del menu\n", "Error: no es una opción de menú válida\n", 1, 11, 3)==0)
+    	if (utn_getNumero(&menu, "Elija una opciÃ³n del menu\n", "Error: no es una opciÃ³n de menÃº vÃ¡lida\n", 1, 11, 3)==0)
     	{
     		switch (menu)
     		{
@@ -56,7 +56,7 @@ int main()
 					}
 					else
 					{
-						printf("Error: la carga de los archivos ya se realizó con anterioridad\n\n");
+						printf("Error: la carga de los archivos ya se realizÃ³ con anterioridad\n\n");
 					}
 					break;
 				case 2:
@@ -112,7 +112,7 @@ int main()
 					}
 					else
 					{
-						printf("No hay elementos para listar. No puede ingresar en esta opcion del Menú\n");
+						printf("No hay elementos para listar. No puede ingresar en esta opcion del MenÃº\n");
 					}
 					break;
 				case 6:
@@ -120,8 +120,12 @@ int main()
 					{
 						if (controller_convocatoria(listaJugadores, listaSelecciones, listaConvocados) != 0)
 						{
-							printf("Algo salió mal, intente nuevamente\n");
+							printf("Algo saliÃ³ mal, intente nuevamente\n");
 						}
+					}
+					else
+					{
+						printf("Debe cargar el archivo antes de ingresar a esta opcion\n");
 					}
 					break;
 				case 7:
@@ -129,7 +133,7 @@ int main()
 					{
 						if (controller_ordenarLista(listaJugadores, listaSelecciones) !=0)
 						{
-							printf("No se pudo acceder al menú\n");
+							printf("No se pudo acceder al menÃº\n");
 						}
 					}
 					else
@@ -144,7 +148,7 @@ int main()
 						{
 							if (controller_guardarJugadoresModoBinario("convocadosporconfederacion.bin", listaConvocadosConfBin) == 0)
 							{
-								printf("Se guardó la lista de 'Convocados' en un archivo BIN.\n");
+								printf("Se guardÃ³ la lista de 'Convocados' en un archivo BIN.\n");
 								flagGuardarBin = 1;
 							}
 						}
@@ -168,18 +172,22 @@ int main()
 						}
 
 					}
+					else
+					{
+						printf("Debe cargar el archivo y crear un archivo .BIN antes de guardar.\n");
+					}
 					break;
 				case 10:
 					if (flagCargaArchivo == 1)
 					{
-						if(utn_getNumero(&guardar, "Desea guardar las listas modificadas? (1- SI, 2- NO)\n", "Error; no ingresó una opción válida\n", 1, 2, 2) == 0)
+						if(utn_getNumero(&guardar, "Desea guardar las listas modificadas? (1- SI, 2- NO)\n", "Error; no ingresÃ³ una opciÃ³n vÃ¡lida\n", 1, 2, 2) == 0)
 						{
 							if (guardar == 1)
 							{
 								if (controller_guardarJugadoresModoTexto("jugadores.csv", listaJugadores) == 0 &&
 									controller_guardarSeleccionesModoTexto("selecciones.csv", listaSelecciones) == 0)
 								{
-									printf("La listas se han sido guardada con éxito en los archivos 'jugadores.csv' y 'selecciones.csv'\n\n");
+									printf("La listas se han sido guardada con Ã©xito en los archivos 'jugadores.csv' y 'selecciones.csv'\n\n");
 									flagGuardado = 1;
 								}
 							}
@@ -189,11 +197,15 @@ int main()
 							}
 						}
 					}
+					else
+					{
+						printf("Debe cargar el archivo antes de ingresar a esta opcion\n");
+					}
 					break;
 				case 11:
 					if (flagGuardado == 0)
 					{
-						if (utn_getNumero(&salir,"No se realizó el guardado de datos. Se perderá el trabajo-\n  Desea Finalizar? (1- SI, 2- NO)\n","\n-Ingrese una opción valida-", 1, 2, 5) ==0)
+						if (utn_getNumero(&salir,"No se realizÃ³ el guardado de datos. Se perderÃ¡ el trabajo-\n  Desea Finalizar? (1- SI, 2- NO)\n","\n-Ingrese una opciÃ³n valida-", 1, 2, 5) ==0)
 						{
 							if (salir == 1 && ll_deleteLinkedList(listaJugadores) && ll_deleteLinkedList(listaSelecciones) && ll_deleteLinkedList(listaConvocados) && ll_deleteLinkedList(listaConvocadosConfBin))
 							{
@@ -203,7 +215,7 @@ int main()
 					}
 					else
 					{
-						if (utn_getNumero(&salir,"Los cambios han sido guardados. Desea Finalizar? (1- SI, 2- NO)\n","\n-Ingrese una opción valida-", 1, 2, 5) == 0)
+						if (utn_getNumero(&salir,"Los cambios han sido guardados. Desea Finalizar? (1- SI, 2- NO)\n","\n-Ingrese una opciÃ³n valida-", 1, 2, 5) == 0)
 						{
 							if (salir == 1 && ll_deleteLinkedList(listaJugadores) && ll_deleteLinkedList(listaSelecciones) && ll_deleteLinkedList(listaConvocados) && ll_deleteLinkedList(listaConvocadosConfBin))
 							{
